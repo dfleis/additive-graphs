@@ -1,0 +1,71 @@
+#===== some useful libraries =====#
+library(numbers)
+library(igraph)
+library(zoo) # rollapply()
+
+#===== parameters =====#
+nmin <- 2
+nmax <- 300
+cyc <- F
+
+nvec <- nmin:nmax
+times <- vector(mode = 'numeric', length = length(nvec))
+hamilt_path <- vector(mode = 'list', length = length(nvec))
+
+#===== functions =====#
+opfun <- function(x, y) {
+  x + y
+}
+mytest <- function(x) {
+  isPrime(x) & (x > n)
+}
+
+#===== work =====#
+for (n in nvec) {
+  pt <- proc.time()
+  s <- 1:n
+  
+  M <- outer(s, s, FUN = opfun)
+  M[lower.tri(M, diag = T)] <- 0
+  x <- which(mytest(M) & (M != 0), arr.ind = T)
+  
+  g <- make_graph(as.vector(t(x)), directed = F)
+  r <- make_ring(length(s), circular = cyc)
+  
+  #is_hamilt[n - nmin + 1] <- subgraph_isomorphic(r, g)
+  hamilt_path[[n - nmin + 1]] <- subgraph_isomorphisms(r, g)
+  times[n - nmin + 1] <- unname((proc.time() - pt)[3])
+  
+  if (n %% 25 == 0)
+    print(unname(cbind(n, times[n - nmin + 1])))
+}
+
+is_hamilt <- sapply(hamilt_path, length) > 0
+edge_sums <- lapply(hamilt_path, function(v) {
+  if (length(v) > 0) {
+    rollapply(v[[1]], 2, sum)
+  } else {
+    0
+  }
+})
+
+
+#===== Plots =====#
+plot(times ~ nvec, type = 'o', pch = 21, cex = 0.5, bg = "white",
+     xlab = "n", ylab = "Time (s)")
+plot(is_hamilt ~ nvec, type = 'p', pch = 15, cex = 0.5,
+     xlab = "n", yaxt = "n", ylab = ifelse(cyc, "Has Cycle", "Has Path"),
+     main = ifelse(cyc,
+                   "Primes > n Graphs\nHamiltonian Cycles", 
+                   "Primes > n Graphs\nHamiltonian Paths"))
+abline(v = nvec[is_hamilt])
+
+nvec[is_hamilt]
+sum(times)
+
+edge_sums[is_hamilt]
+
+
+
+
+

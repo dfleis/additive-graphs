@@ -1,0 +1,69 @@
+#===== some useful libraries =====#
+library(numbers)
+library(igraph)
+
+#===== parameters =====#
+nmin <- 2
+nmax <- 1e2
+cyc <- F
+
+nvec <- nmin:nmax
+times <- vector(mode = 'numeric', length = length(nvec))
+is_hamilt <- vector(mode = 'logical', length = length(nvec))
+
+#===== functions =====#
+opfun <- function(x, y) {
+  x + y
+}
+mytest <- function(x) {
+  isPrime(x) & (x > n)
+}
+
+#===== work =====#
+for (n in nvec) {
+  pt <- proc.time()
+  s <- 1:n
+
+  M <- outer(s, s, FUN = opfun)
+  M[lower.tri(M, diag = T)] <- 0
+  x <- which(mytest(M) & (M != 0), arr.ind = T)
+
+  g <- make_graph(as.vector(t(x)), directed = F)
+  r <- make_ring(length(s), circular = cyc)
+
+  is_hamilt[n - nmin + 1] <- subgraph_isomorphic(r, g)
+  times[n - nmin + 1] <- unname((proc.time() - pt)[3])
+  
+  if (n %% 25 == 0)
+  print(unname(cbind(n, times[n - nmin + 1])))
+}
+
+#===== Plots =====#
+plot(times ~ nvec, type = 'o', pch = 21, cex = 0.5, bg = "white",
+     xlab = "n", ylab = "Time (s)")
+plot(is_hamilt ~ nvec, type = 'p', pch = 15, cex = 0.5, ylim = c(0, 1),
+     xlab = "n", yaxt = "n", ylab = ifelse(cyc, "Has Cycle", "Has Path"),
+     main = ifelse(cyc,
+                   "Primes > n Graphs\nHamiltonian Cycles", 
+                   "Primes > n Graphs\nHamiltonian Paths"))
+axis(2, at = c(0, 1), labels = c(0, 1))
+abline(v = nvec[is_hamilt])
+
+which(is_hamilt)
+nvec[is_hamilt]
+sum(times)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

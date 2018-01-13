@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1515883243975.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3903615031",
+    "id" : "7C3CED45",
+    "lastKnownWriteTime" : 1515883829,
+    "last_content_update" : 1515883829277,
+    "path" : "~/projects/additive-graphs/code/graphs_primes_above_n.R",
+    "project_path" : "code/graphs_primes_above_n.R",
+    "properties" : {
+        "cursorPosition" : "1,19",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
