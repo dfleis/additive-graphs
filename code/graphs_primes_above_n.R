@@ -5,7 +5,7 @@ library(GGally) # ggnet2(), plotting graphs
 library(network) # generate graphs/networks for use with GGally
 
 #===== parameters =====#
-n <- 4
+n <- 5
 V <- 1:n # vertex set
 cyc <- F # look for hamiltonian path (cyc <- F) or cycle (cyc <- T)
 
@@ -38,6 +38,8 @@ proc.time() - pt
 
 iso
 
+
+plot(g, mark.col = 'red')
 
 
 

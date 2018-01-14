@@ -27,9 +27,8 @@ edge_fun <- function(x, y) { # compute edge values
   x + y
 }
 edge_test <- function(x) { # edge set test 
-  #isPrime(x) & (x > n)
+  isPrime(x) & (x > n)
   #vis_integer(sqrt(x))
-  #
 }
 
 #===== work =====#

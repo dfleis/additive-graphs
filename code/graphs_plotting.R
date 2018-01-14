@@ -18,6 +18,7 @@ nmin <- 3 # fewest vertices to consider
 nmax <- 20 # most vertices to consider
 
 nvec <- nmin:nmax
+
 #===== functions =====#
 is_integer <- function(x, eps = 1e-15) {
   min(abs(c(x %% 1, x %% 1 - 1))) < eps
