@@ -45,7 +45,7 @@ for (n in nvec) {
   
   xnet <- network(E, directed = F)
   
-  nb_lead_zeros <- ceiling(log10(nmax) - log10(n))
+  nb_lead_zeros <- ceiling(log10(nmax) - log10(n)) + 1
   lead_zeros <- rep(0, nb_lead_zeros)
   filename <- paste0("./img/graph_", lead_zeros, n, ".pdf")
   
@@ -55,7 +55,6 @@ for (n in nvec) {
          edge.label = E[,1] + E[,2], edge.label.color = "gray20", 
          edge.label.size = 2.5)
   ggsave(filename)
-  #dev.off()
 }
 
 
