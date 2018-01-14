@@ -1,4 +1,6 @@
 ###
+# PLOTS:
+#
 # Determines whether an additive graph of vertices {1, ..., n}
 # (from n = nmin to n = nmax) and edges defined by a user specified
 # function has a Hamiltonian path/cycle
@@ -7,17 +9,15 @@
 #===== some useful libraries =====#
 library(numbers) # number theoretic tools (isPrime(), etc.)
 library(igraph) # subgraph_isomorphic(), subgraph_isomorphisms()
+library(GGally) # ggnet2(), plotting graphs
+library(ggplot2) 
 library(network) # generate graphs/networks for use with GGally
 
 #===== parameters =====#
 nmin <- 3 # fewest vertices to consider
-nmax <- 50 # most vertices to consider
-cyc <- T # look for hamiltonian path (cyc <- F) or cycle (cyc <- T)
+nmax <- 20 # most vertices to consider
 
 nvec <- nmin:nmax
-times <- vector(mode = 'numeric', length = length(nvec))
-is_hamilt <- vector(mode = 'logical', length = length(nvec))
-
 #===== functions =====#
 is_integer <- function(x, eps = 1e-15) {
   min(abs(c(x %% 1, x %% 1 - 1))) < eps
@@ -27,14 +27,13 @@ edge_fun <- function(x, y) { # compute edge values
   x + y
 }
 edge_test <- function(x) { # edge set test 
-  #isPrime(x) & (x > n)
+  isPrime(x) & (x > n)
   #vis_integer(sqrt(x))
-  #
 }
 
 #===== work =====#
 for (n in nvec) {
-  pt <- proc.time()
+  print(n)
   
   V <- 1:n
   M <- outer(V, V, FUN = edge_fun)
@@ -42,25 +41,21 @@ for (n in nvec) {
   E <- which(edge_test(M) & (M != 0), arr.ind = T)
   
   g <- make_graph(as.vector(t(E)), directed = F)
-  r <- make_ring(length(V), circular = cyc)
   
-  is_hamilt[n - nmin + 1] <- subgraph_isomorphic(r, g)
-  times[n - nmin + 1] <- unname((proc.time() - pt)[3])
+  xnet <- network(E, directed = F)
   
-  if (n %% 25 == 0)
-    print(unname(cbind(n, times[n - nmin + 1])))
+  nb_lead_zeros <- ceiling(log10(nmax) - log10(n))
+  lead_zeros <- rep(0, nb_lead_zeros)
+  filename <- paste0("./img/graph_", lead_zeros, n, ".pdf")
+  
+  pdf(filename, width = 4, height = 4)
+  ggnet2(xnet, node.size = 6,
+         label = T, label.size = 3,
+         edge.label = E[,1] + E[,2], edge.label.color = "gray20", 
+         edge.label.size = 2.5)
+  dev.off()
 }
 
-#===== plots =====#
-plot(times ~ nvec, type = 'o', pch = 21, cex = 0.5, bg = "white",
-     xlab = "n", ylab = "Time (s)")
-plot(is_hamilt ~ nvec, type = 'p', pch = 15, cex = 0.5, ylim = c(-0.1, 1.1),
-     xlab = "n", yaxt = "n", ylab = ifelse(cyc, "Has Cycle", "Has Path"),
-     main = ifelse(cyc,
-                   "Hamiltonian Cycles", 
-                   "Hamiltonian Paths"))
-axis(2, at = c(0, 1), labels = c(0, 1))
-abline(v = nvec[is_hamilt])
 
 
 
