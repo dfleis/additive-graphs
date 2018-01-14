@@ -14,8 +14,8 @@ library(ggplot2)
 library(network) # generate graphs/networks for use with GGally
 
 #===== parameters =====#
-nmin <- 3 # fewest vertices to consider
-nmax <- 20 # most vertices to consider
+nmin <- 6 # fewest vertices to consider
+nmax <- 50 # most vertices to consider
 
 nvec <- nmin:nmax
 
@@ -49,12 +49,13 @@ for (n in nvec) {
   lead_zeros <- rep(0, nb_lead_zeros)
   filename <- paste0("./img/graph_", lead_zeros, n, ".pdf")
   
-  pdf(filename, width = 4, height = 4)
+  #pdf(filename, width = 4, height = 4)
   ggnet2(xnet, node.size = 6,
          label = T, label.size = 3,
          edge.label = E[,1] + E[,2], edge.label.color = "gray20", 
          edge.label.size = 2.5)
-  dev.off()
+  ggsave(filename)
+  #dev.off()
 }
 
 

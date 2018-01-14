@@ -5,7 +5,7 @@ library(GGally) # ggnet2(), plotting graphs
 library(network) # generate graphs/networks for use with GGally
 
 #===== parameters =====#
-n <- 5
+n <- 12
 V <- 1:n # vertex set
 cyc <- F # look for hamiltonian path (cyc <- F) or cycle (cyc <- T)
 
@@ -36,10 +36,10 @@ pt <- proc.time()
 iso <- subgraph_isomorphic(r, g)
 proc.time() - pt
 
-iso
-
-
-plot(g, mark.col = 'red')
+plot(g, vertex.color =  'gray80', vertex.size = 10, 
+     vertex.label.cex = 0.75, vertex.label.color = "black",
+     edge.label = E[,1] + E[,2], edge.label.cex = 0.6,
+     edge.label.color = "gray20")
 
 
 
